@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vprodb
+  labels:
+    app: vprodb
+spec:
+  selector:
+    matchLabels:
+      app: vprodb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vprodb
+    spec:
+      containers:
+        - name: vprodb
+          image: leonchiang/vprofile_db:latest
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "300m"
+          ports:
+            - containerPort: 3306
+              name: vprodb-port
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: db-password
+          volumeMounts:
+            - mountPath: "/var/lib/mysql"
+              name: vpro-db-data
+      nodeSelector:
+        zone: ap-northeast-1a
+      tolerations:
+        - key: "node.kubernetes.io/disk-pressure"
+          operator: "Exists"
+          effect: "NoSchedule"
+      volumes:
+        - name: vpro-db-data
+          persistentVolumeClaim:
+            claimName: ebs-claim
+      initContainers:
+        - name: busybox
+          image: busybox:latest
+          args:
+            - "rm"
+            - "-rf"
+            - "/var/lib/mysql/lost+found"
+          volumeMounts:
+            - name: vpro-db-data
+              mountPath: /var/lib/mysql
