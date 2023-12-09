@@ -16,10 +16,10 @@ spec:
     spec:
       containers:
         - name: vprodb
-          image: leonchiang/vprofile_db:latest
+          image: vprofile/vprofiledb:V1
           resources:
             limits:
-              memory: "2Gi"
+              memory: "1Gi"
               cpu: "300m"
           ports:
             - containerPort: 3306
