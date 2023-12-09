@@ -1,11 +1,50 @@
 #!/bin/bash
 
-# Delete all services amd deployment
-kubectl delete svc vproapp-service
-kubectl delete svc vprocache01
-kubectl delete svc vprodb
-kubectl delete svc vpromq01
-kubectl delete deploy vproapp
-kubectl delete deploy vprodb
-kubectl delete deploy vpromc
-kubectl delete deploy vpromq01
+# Delete Secret file
+echo
+echo "Delete Secret:"
+echo
+
+kubectl delete -f .
+
+echo
+echo "##############################################"
+echo
+
+# Deploy Memcache Service
+echo "Delete Memcache:"
+echo
+
+kubectl delete -f Memcached/.
+
+echo
+echo "##############################################"
+echo
+
+# Deploy Mysql Service
+echo "Delete Mysql:"
+echo
+
+kubectl delete -f Mysql/.
+
+echo
+echo "##############################################"
+echo
+
+# Deploy RabbitMq Service
+echo "Delete RabbitMq:"
+echo
+
+kubectl delete -f RabbitMq/.
+
+echo
+echo "##############################################"
+echo
+
+# Deploy Tomcat Service
+echo "Delete Tomcat:"
+echo
+
+kubectl delete -f Tomcat/.
+
+echo
